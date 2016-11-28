@@ -64,7 +64,7 @@ function sendNotificationToUser(projectName, id) {
         },
         body: JSON.stringify({
             notification: {
-                title: 'Checkout the new project' + projectName,
+                title: 'Checkout the new project, ' + projectName,
                 icon: "/images/icon-notification-192x192.png",
                 click_action: "http://crowdevelop-40f3c.firebaseapp.com/projects/index/" + id
             },
