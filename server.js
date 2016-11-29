@@ -17,8 +17,7 @@ projectsRef = firebase.database().ref("projects");
 function listenForNotificationRequests() {
     projectsRef.on('child_added', function(projectSnapshot) {
         var request = projectSnapshot.val();
-        console.log(request);
-        sendNotificationToUser(request.name, "-KQMm6HtJZ64VwmTFMj1");
+        sendNotificationToUser(request.name, projectSnapshot.key);
     });
 
     ref.on('child_added', function(requestSnapshot) {
@@ -28,6 +27,7 @@ function listenForNotificationRequests() {
             request.username,
             request.token
         )
+        deleteUserNotification(requestSnapshot.key);
     }, function(error) {
         console.log('ERROR');
         console.error(error);
@@ -49,7 +49,7 @@ function addUserToTopics(username, token) {
         } else if (response.statusCode >= 400) {
             console.error('HTTP Error: ' + response.statusCode + ' - ' + response.statusMessage);
         } else {
-            console.log('Subscribed to users topic', response.statusCode);
+            console.log('Subscribed to users topic. Response: ', response.statusCode);
         }
     });
 }
@@ -63,12 +63,13 @@ function sendNotificationToUser(projectName, id) {
             'Authorization': 'key=' + API_KEY
         },
         body: JSON.stringify({
+            to: '/topics/users',
             notification: {
-                title: 'Checkout the new project' + projectName,
+                title: 'Checkout the new project, ' + projectName,
                 icon: "/images/icon-notification-192x192.png",
-                click_action: "http://crowdevelop-40f3c.firebaseapp.com/projects/index/" + id
+                click_action: "https://crowdevelop-40f3c.firebaseapp.com/projects/index/" + id
             },
-            to: '/topics/users'
+            priority: 10
         })
     }, function(error, response, body) {
         if (error) {
@@ -79,6 +80,17 @@ function sendNotificationToUser(projectName, id) {
             console.log('New project notification sended');
         }
     });
+}
+
+function deleteUserNotification(keyToDelete) {
+    var notificationTokenReference = firebase.database().ref("notificationRequests");
+    notificationTokenReference.remove()
+        .then(function() {
+            console.log('Token reference removed');
+        })
+        .catch(function() {
+            console.log('Failed to remove reference token');
+        });
 }
 
 // start listening
