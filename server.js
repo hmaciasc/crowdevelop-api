@@ -1,11 +1,6 @@
-var http = require('http');
 var firebase = require('firebase-admin');
 var request = require('request');
 
-http.createServer(function(request, response) {
-
-
-}).listen(process.env.PORT || 5000);
 var API_KEY = "AIzaSyDeh7Ahz39eimUDn5JUrv-EAqGgu0debxs"; // Your Firebase Cloud Messaging Server API key
 
 // Fetch the service account key JSON file contents
@@ -22,7 +17,10 @@ projectsRef = firebase.database().ref("projects");
 function listenForNotificationRequests() {
     projectsRef.on('child_added', function(projectSnapshot) {
         var request = projectSnapshot.val();
-        sendNotificationToUser(request.name, projectSnapshot.key);
+        if (request.notified === false) {
+            sendNotificationToUser(request.name, projectSnapshot.key);
+            setNotified(projectSnapshot.key);
+        }
     });
 
     ref.on('child_added', function(requestSnapshot) {
@@ -87,6 +85,11 @@ function sendNotificationToUser(projectName, id) {
     });
 }
 
+function setNotified(key) {
+    var projectsRef = firebase.database().ref("projects/" + key);
+    projectsRef.child("notified").set(true);
+}
+
 function deleteUserNotification(keyToDelete) {
     var notificationTokenReference = firebase.database().ref("notificationRequests");
     notificationTokenReference.remove()
@@ -100,5 +103,3 @@ function deleteUserNotification(keyToDelete) {
 
 // start listening
 listenForNotificationRequests();
-
-console.log('Server running at http://127.0.0.1:5000/');
