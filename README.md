@@ -1,4 +1,4 @@
-# CrowDevelop-server
+# CrowDevelop-api
 
 (https://github.com/hmaciasc/CrowDevelop) - Repository for client-side
 (https://crowdevelop-40f3c.firebaseapp.com)
