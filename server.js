@@ -1,15 +1,15 @@
 var firebase = require('firebase-admin');
 var request = require('request');
 
-var API_KEY = "AIzaSyDeh7Ahz39eimUDn5JUrv-EAqGgu0debxs"; // Your Firebase Cloud Messaging Server API key
+var API_KEY = "FCM_API_KEY"; // Your Firebase Cloud Messaging Server API key
 
 // Fetch the service account key JSON file contents
-var serviceAccount = require("./crowdevelop-40f3c-firebase-adminsdk-jtulr-a7a097be2b.json");
+var serviceAccount = require("FIREBASE_PRIVATE_KEY_FILE");
 
 // Initialize the app with a service account, granting admin privileges
 firebase.initializeApp({
     credential: firebase.credential.cert(serviceAccount),
-    databaseURL: "https://crowdevelop-40f3c.firebaseio.com"
+    databaseURL: "DB_URL"
 });
 ref = firebase.database().ref("notificationRequests");
 projectsRef = firebase.database().ref("projects");

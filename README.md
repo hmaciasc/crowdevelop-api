@@ -1,4 +1,6 @@
-# CrowDevelop-server
+# CrowDevelop-api
+
+Project stalled. If you want to fork it and continue development you will have to create a firebase project and import keys.
 
 (https://github.com/hmaciasc/CrowDevelop) - Repository for client-side
 (https://crowdevelop-40f3c.firebaseapp.com)
